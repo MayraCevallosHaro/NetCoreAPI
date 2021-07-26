@@ -26,9 +26,15 @@ namespace NetCoreAPI.Data.Repositories
         }
 
 
-        public Task<Car> DeleteCar(Car car)
+        public async Task<bool> DeleteCar(Car car)
         {
-            throw new NotImplementedException();
+            var db = dbConnection();
+            var sql = @" DELETE 
+                            FROM public.""Cars"" 
+                                WHERE id = @Id";
+            
+            var result = await db.ExecuteAsync(sql, new {Id= car.id});
+            return result > 0;
         }
 
         public async Task<IEnumerable<Car>> GetAllCars()
@@ -58,7 +64,33 @@ namespace NetCoreAPI.Data.Repositories
             return result > 0;
         }
 
-        public Task<Car> UpdateCar(Car car)
+        public async Task<bool> UpdateCar(Car car)
+        {
+            var db = dbConnection();
+            var sql = @" 
+                        UPDATE public.""Cars""
+                        SET make=@Make
+                        model= @Model
+                        color=@Color
+                        year=@Year
+                        doors= @Doors
+                        WHERE id= @Id";
+
+            var result = await db.ExecuteAsync(sql, new { car.Make, car.Model, car.Color, car.Year, car.Door, car.id});
+            return result > 0;
+        }
+
+        Task<Car> ICarRepository.InsertCar(Car car)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<Car> ICarRepository.UpdateCar(Car car)
+        {
+            throw new NotImplementedException();
+        }
+
+        Task<Car> ICarRepository.DeleteCar(Car car)
         {
             throw new NotImplementedException();
         }
