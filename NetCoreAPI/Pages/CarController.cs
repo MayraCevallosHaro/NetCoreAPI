@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NetCoreAPI.Data.Repositories;
+using NetCoreAPI.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,6 +30,38 @@ namespace NetCoreAPI.Pages
         public async Task<IActionResult> GetCarDetails(int id)
         {
             return Ok(await _carRepository.GetCarDetails(id));
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> CreateCar([FromBody]Car car)
+        {
+            if (car == null)
+                return BadRequest();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var created = await _carRepository.InsertCar(car);
+            return Created("created", created);
+        }
+
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateCar([FromBody] Car car)
+        {
+            if (car == null)
+                return BadRequest();
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+             await _carRepository.UpdateCar(car);
+            return NoContent();
+        }
+
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCar(int id)
+        {
+            
+            await _carRepository.DeleteCar(new Car { id = id});
+            return NoContent();
         }
 
     }

@@ -9,4 +9,10 @@
     <ProjectReference Include="..\NetCoreAPI.Model\NetCoreAPI.Model.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Swashbuckle.Core">
+      <HintPath>..\..\..\..\Downloads\swashbuckle.core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
