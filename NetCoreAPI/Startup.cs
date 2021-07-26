@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NetCoreAPI.Data;
+using NetCoreAPI.Data.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +26,11 @@ namespace NetCoreAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
+
+            var postreSQLConnectionConfiguration = new PostgreSQLConfiguracion(Configuration.GetConnectionString("PostgreSQLConnection"));
+            services.AddSingleton(postreSQLConnectionConfiguration);
+            services.AddScoped<ICarRepository, ICarRepository>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,6 +58,9 @@ namespace NetCoreAPI
             {
                 endpoints.MapRazorPages();
             });
+
+          
+
         }
     }
 }

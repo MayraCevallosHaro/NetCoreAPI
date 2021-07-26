@@ -9,6 +9,14 @@ namespace NetCoreAPI.Data.Repositories
 {
     class CarRepository : ICarRepository
     {
+        private PostgreSQLConfiguracion _connectionString;
+
+        public CarRepository(PostgreSQLConfiguracion connectionString)
+        {
+            _connectionString = connectionString;
+
+        }
+
         public Task<Car> DeleteCar(Car car)
         {
             throw new NotImplementedException();
