@@ -1,5 +1,7 @@
-﻿using NetCoreAPI.Model;
+﻿using Dapper;
+using NetCoreAPI.Model;
 using Npgsql;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,19 +31,31 @@ namespace NetCoreAPI.Data.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Car>> GetAllCars()
+        public async Task<IEnumerable<Car>> GetAllCars()
         {
-            throw new NotImplementedException();
+            var db = dbConnection();
+            var sql = @" SELECT id,make,model,color,year,doors
+                            FROM public.""Cars"" ";
+            return await db.QueryAsync<Car>(sql, new { });
         }
 
-        public Task<Car> GetCarDetails(int id)
+        public async Task<Car> GetCarDetails(int id)
         {
-            throw new NotImplementedException();
+            var db = dbConnection();
+            var sql = @" SELECT id,make,model,color,year,doors
+                            FROM public.""Cars"" 
+                where id = @Id";
+            return await db.QueryFirstOrDefaultAsync<Car>(sql, new {Id = id});
         }
 
-        public Task<Car> InsertCar(Car car)
+        public async Task<bool> InsertCar(Car car)
         {
-            throw new NotImplementedException();
+            var db = dbConnection();
+            var sql = @" 
+                        INSERT INTO public.""Cars""(make,model,color,year,doors)
+                        VALUES(@Make,@Model,@Color,@Year, @Doors)";
+           var result =  await db.ExecuteAsync(sql, new { car.Make, car.Model, car.Color, car.Year, car.Door });
+            return result > 0;
         }
 
         public Task<Car> UpdateCar(Car car)
