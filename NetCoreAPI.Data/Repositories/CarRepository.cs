@@ -1,4 +1,5 @@
 ﻿using NetCoreAPI.Model;
+using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,12 @@ namespace NetCoreAPI.Data.Repositories
             _connectionString = connectionString;
 
         }
+
+        protected NpgsqlConnection dbConnection()
+        {
+            return new NpgsqlConnection(_connectionString.ConnectionString);
+        }
+
 
         public Task<Car> DeleteCar(Car car)
         {
